@@ -26,11 +26,11 @@
 
             <form id="form-tarea">
                 <div class="form-group">
-                    <label for="titulo">Título de la Tarea <span class="required">*</span></label>
+                    <label for="titulo">Nombre del plato <span class="required">*</span></label>
                     <input
                         type="text"
-                        id="titulo"
-                        placeholder="Ej. Implementar endpoints asíncronos"
+                        id="nombre_plato"
+                        placeholder="Ej. Cocido Boyacense"
                         required
                         minlength="3"
                         maxlength="150"
@@ -38,45 +38,36 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="descripcion">Descripción</label>
-                    <textarea
-                        id="descripcion"
-                        rows="3"
-                        placeholder="Ej. Definir las llamadas Fetch en app.js"
-                        maxlength="500"
-                    ></textarea>
-                </div>
+                    <label for="categoria">Categoria</label>
+                    <select id="categoria" required>
+                        <option value="" disabled selected>Selecciona una categoria</option>
+                        <option value="sopas y sancochos">Sopas y Sancochos</option>
+                        <option value="Platos tipicos">Platos tipicos</option>
+                        <option value="Entradas y Amasijos">Entradas y Amasijos</option>
+                        <option value="Postres y Bebidas">Postres y Bebidas</option>
+                    </select>
+                    </div>
 
-                <button type="submit" id="btn-guardar" class="btn btn-primary">
-                    <i class="fa-solid fa-paper-plane"></i> Guardar Tarea
-                </button>
+                    <div class="form-group">
+                        <label for="precio">Precio (COP) <span class="required">*</span></label>
+                        <input 
+                        type="number"
+                        id="precio"
+                        placeholder="Ej. $20.000"
+                        required
+                        min="1"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="disponible_hoy">
+                            <input type="checkbox" id="disponible_hoy" checked>
+                            Disponible hoy en el menu
+                        </label>
+                    </div>
+
+                    
             </form>
         </section>
 
-        <!-- Lista de Tareas y Feedback Visual -->
-        <section class="card list-card">
-            <div class="list-header">
-                <h2><i class="fa-solid fa-tasks"></i> Mis Tareas</h2>
-                <span id="contador-tareas" class="badge">0 Tareas</span>
-            </div>
-
-            <!-- Indicadores Visuales de Estado -->
-            <div id="loading-spinner" class="status-message hidden">
-                <i class="fa-solid fa-spinner fa-spin"></i> Cargando tareas desde MongoDB...
-            </div>
-
-            <div id="error-message" class="status-message error-box hidden">
-                <i class="fa-solid fa-triangle-exclamation"></i> Error al conectar con la API RESTful.
-            </div>
-
-            <!-- Contenedor dinámico de tareas -->
-            <div id="contenedor-tareas" class="tareas-grid">
-                <!-- Se poblará dinámicamente mediante JavaScript -->
-            </div>
-        </section>
-
-    </div>
-
-    <script src="app.js"></script>
-</body>
-</html>
+       

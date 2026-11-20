@@ -110,7 +110,7 @@ async def get_plato_por_id(id: str):
     tags=["platos"],
     summary="Actualizar estado o campos de una tarea"
 )
-async def update_tarea(id: str, tarea_update: PlatoUpdate):
+async def update_plato(id: str, plato_update: PlatoUpdate):
     
     if not ObjectId.is_valid(id):
         raise HTTPException(
@@ -119,7 +119,7 @@ async def update_tarea(id: str, tarea_update: PlatoUpdate):
         )
 
    
-    datos_a_actualizar = tarea_update.model_dump(exclude_unset=True)
+    datos_a_actualizar = plato_update.model_dump(exclude_unset=True)
 
     if len(datos_a_actualizar) >= 1:
         resultado_actualizacion = await coleccion_platos_menu.update_one(
