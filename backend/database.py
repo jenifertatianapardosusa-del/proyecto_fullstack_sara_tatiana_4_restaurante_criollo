@@ -10,7 +10,7 @@ client = AsyncIOMotorClient(MONGODB_URL)
 database = client[DATABASE_NAME]
 
 
-coleccion_tareas = database["platos_menu"]
+coleccion_platos_menu = database["platos_menu"]
 
 async def verificar_conexion():
 

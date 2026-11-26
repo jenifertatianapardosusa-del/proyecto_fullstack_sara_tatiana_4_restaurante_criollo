@@ -1,0 +1,288 @@
+/*variables y resert*/
+:root {
+    --rojo: #b5352b;
+    --rojo-oscuro: #8e2820;
+    --mostaza: #e0a526;
+    --crema: #fbf4e6;
+    --cafe: #3b2a20;
+    --gris: #6b6b6b;
+    --borde: #e6dcc8;
+    --verde-bg: #d4edda;
+    --verde-tx: #155724;
+    --rojo-bg: #f8d7da;
+    --rojo-tx: #721c24;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--crema);
+    color: var(--cafe);
+    line-height: 1.5;
+}
+
+.container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+}
+
+/*Encabezado*/
+.header {
+    background: linear-gradient(135deg, var(--rojo), var(--rojo-oscuro));
+    color: #fff;
+    text-align: center;
+    padding: 28px 16px;
+    border-radius: 12px;
+    border-bottom: 5px solid var(--mostaza);
+    margin-bottom: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    letter-spacing: 1px;
+}
+
+.header i {
+    color: var(--mostaza);
+    margin-right: 8px;
+}
+
+/*Tarjetas*/
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--borde);
+}
+
+.card h2 {
+    margin: 0 0 16px;
+    font-size: 1.3rem;
+    color: var(--rojo);
+    border-bottom: 2px solid var(--borde);
+    padding-bottom: 8px;
+}
+
+.card h2 i {
+    margin-right: 6px;
+}
+
+/*Formulario*/
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.required {
+    color: var(--rojo);
+}
+
+input[type="text"],
+input[type="number"],
+select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+    background: #fffdf8;
+    color: var(--cafe);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--mostaza);
+    box-shadow: 0 0 0 3px rgba(224, 165, 38, 0.25);
+}
+
+.form-group label:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--rojo);
+}
+
+/*Botones*/
+.form-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: transform 0.1s, filter 0.2s;
+}
+
+.btn:hover {
+    filter: brightness(1.08);
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn i {
+    margin-right: 4px;
+}
+
+.btn-primary {
+    background: var(--rojo);
+    color: #fff;
+}
+
+.btn-secondary {
+    background: #7f8c8d;
+    color: #fff;
+}
+
+.btn-small {
+    padding: 7px 11px;
+    background: #f1e8d4;
+    color: var(--cafe);
+}
+
+.btn-small i {
+    margin: 0;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: #fff;
+}
+
+/*Mensajes*/
+.mensaje {
+    margin-top: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.mensaje.ok {
+    background: var(--verde-bg);
+    color: var(--verde-tx);
+}
+
+.mensaje.error {
+    background: var(--rojo-bg);
+    color: var(--rojo-tx);
+}
+
+.estado-lista {
+    text-align: center;
+    color: var(--gris);
+    padding: 16px 0;
+}
+
+/*Lista de platos*/
+.lista-platos {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.plato-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 8px;
+    border-bottom: 1px solid var(--borde);
+    transition: background 0.2s;
+}
+
+.plato-item:last-child {
+    border-bottom: none;
+}
+
+.plato-item:hover {
+    background: #fffaf0;
+}
+
+.plato-item.agotado {
+    opacity: 0.6;
+}
+
+.plato-info h3 {
+    margin: 0 0 4px;
+    font-size: 1.1rem;
+}
+
+.plato-info p {
+    margin: 0 0 6px;
+    color: var(--gris);
+    font-size: 0.92rem;
+}
+
+.plato-acciones {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+.badge-ok {
+    background: var(--verde-bg);
+    color: var(--verde-tx);
+}
+
+.badge-no {
+    background: var(--rojo-bg);
+    color: var(--rojo-tx);
+}
+
+/*Responsive*/
+@media (max-width: 520px) {
+    .header h1 {
+        font-size: 1.4rem;
+    }
+
+    .plato-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .plato-acciones {
+        align-self: flex-end;
+    }
+}

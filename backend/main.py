@@ -46,11 +46,11 @@ async def root():
 )
 async def create_plato(plato_in: PlatoCreate):
     
-    plato_existente = await coleccion_platos_menu.find_one({"titulo": plato_in.titulo})
+    plato_existente = await coleccion_platos_menu.find_one({"nombre_plato": plato_in.nombre_plato})
     if plato_existente:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Ya existe un plato registrado con el título '{plato_in.titulo}'"
+            detail=f"Ya existe un plato registrado con el título '{plato_in.nombre_plato}'"
         )
     
     nuevo_plato = plato_in.model_dump()
