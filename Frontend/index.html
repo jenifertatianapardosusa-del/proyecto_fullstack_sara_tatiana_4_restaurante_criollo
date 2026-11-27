@@ -1,89 +1,313 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Restaurante CUCHARA REBELDE - SENA ADSO</title>
+    <title>Cuchara Rebelde | Sabor Criollo</title>
+    <meta name="description" content="Descubre Cuchara Rebelde, un restaurante donde la tradición y el auténtico sabor criollo se encuentran.">
 
-    <link rel="stylesheet" href="styless.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/inicio.css">
 </head>
+
 <body>
 
-    <div class="container">
+    <!-- NAVBAR -->
+    <header class="nav">
+        <div class="navbar">
 
-        <header class="header">
-            <h1><i class="fa-solid fa-utensils"></i> Restaurante CUCHARA REBELDE</h1>
-        </header>
+            <a href="index.html" class="logo-link">
+                <img
+                    class="navbar_logo"
+                    src="img/cuchara_rebelde.png"
+                    alt="Cuchara Rebelde"
+                >
+            </a>
 
-        <!-- Formulario de creación / edición -->
-        <section class="card form-card">
-            <h2 id="titulo-form"><i class="fa-solid fa-plus-circle"></i> Nuevo plato</h2>
+            <nav class="nav-links">
+                <a href="index.html" class="activo">Inicio</a>
+                <a href="menu.html">Menú</a>
+                <a href="nuevo_plato.html">Nuevo plato</a>
+            </nav>
 
-            <form id="form-plato">
-                <div class="form-group">
-                    <label for="nombre_plato">Nombre del plato <span class="required">*</span></label>
-                    <input type="text" id="nombre_plato" placeholder="Ej. Cocido Boyacense"
-                           required minlength="3" maxlength="150">
+        </div>
+    </header>
+
+
+    <main>
+
+        <!-- HERO PRINCIPAL -->
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="hero-etiqueta">
+                    SABOR QUE NOS REPRESENTA
+                </span>
+
+                <h1>
+                    Tradición que se disfruta,
+                    <span>sabor que enamora.</span>
+                </h1>
+
+                <p>
+                    En Cuchara Rebelde celebramos la riqueza de nuestra
+                    gastronomía criolla. Disfruta preparaciones llenas
+                    de tradición, ingredientes y ese toque casero que
+                    nos hace volver por más.
+                </p>
+
+                <div class="hero-buttons">
+                    <a href="menu.html" class="btn-principal">
+                        Explorar nuestro menú
+                    </a>
                 </div>
 
-                <div class="form-group">
-                    <label for="categoria">Categoría <span class="required">*</span></label>
-                    <select id="categoria" required>
-                        <option value="" disabled selected>Selecciona una categoría</option>
-                        <option value="Sopas y Sancochos">Sopas y Sancochos</option>
-                        <option value="Platos Tipicos">Platos Típicos</option>
-                        <option value="Entradas y Amasijos">Entradas y Amasijos</option>
-                        <option value="Postres y Bebidas">Postres y Bebidas</option>
-                    </select>
+                <div class="hero-frase">
+                    <span>♥</span>
+                    El auténtico sabor de nuestra tierra.
                 </div>
 
-                <div class="form-group">
-                    <label for="precio">Precio (COP) <span class="required">*</span></label>
-                    <input type="number" id="precio" placeholder="Ej. 20000" required min="1" step="1">
-                </div>
-
-                <div class="form-group">
-                    <label for="disponible_hoy">
-                        <input type="checkbox" id="disponible_hoy" checked>
-                        Disponible hoy en el menú
-                    </label>
-                </div>
-
-                <div class="form-actions">
-                    <button type="submit" id="btn-guardar" class="btn btn-primary">
-                        <i class="fa-solid fa-floppy-disk"></i> Guardar plato
-                    </button>
-                    <button type="button" id="btn-cancelar" class="btn btn-secondary" hidden>
-                        <i class="fa-solid fa-xmark"></i> Cancelar edición
-                    </button>
-                </div>
-            </form>
-
-            <p id="mensaje" class="mensaje" hidden></p>
-        </section>
-
-        <!-- Listado del menú -->
-        <section class="card list-card">
-            <h2><i class="fa-solid fa-book-open"></i> Menú completo</h2>
-
-            <div class="form-group">
-                <label for="filtro-categoria">Filtrar por categoría</label>
-                <select id="filtro-categoria">
-                    <option value="">Todas</option>
-                    <option value="Sopas y Sancochos">Sopas y Sancochos</option>
-                    <option value="Platos Tipicos">Platos Típicos</option>
-                    <option value="Entradas y Amasijos">Entradas y Amasijos</option>
-                    <option value="Postres y Bebidas">Postres y Bebidas</option>
-                </select>
             </div>
 
-            <p id="estado-lista" class="estado-lista">Cargando menú...</p>
-            <ul id="lista-platos" class="lista-platos"></ul>
+            <div class="hero-image">
+                <img
+                    src="img/platos.jpg"
+                    alt="Preparaciones tradicionales de comida criolla"
+                >
+
+                <div class="hero-image-text">
+                    <span>Hecho con sabor</span>
+                    <strong>100% criollo</strong>
+                </div>
+            </div>
+
         </section>
 
-    </div>
 
-    <script src="app.js"></script>
+        <!-- FRANJA DECORATIVA -->
+        <section class="franja-sabor">
+            <span>Tradición</span>
+            <span>✦</span>
+            <span>Sabor</span>
+            <span>✦</span>
+            <span>Calidad</span>
+            <span>✦</span>
+            <span>Pasión por la cocina</span>
+        </section>
+
+
+        <!-- SOBRE NOSOTROS -->
+        <section class="nosotros" id="nosotros">
+
+            <div class="nosotros-image">
+                <img
+                    src="img/compartir.jpg"
+                    alt="Comida tradicional preparada con dedicación"
+                >
+            </div>
+
+            <div class="nosotros-content">
+
+                <span class="subtitulo">NUESTRA ESENCIA</span>
+
+                <h2>
+                    Más que comida,
+                    <span>una tradición para compartir.</span>
+                </h2>
+
+                <p>
+                    En Cuchara Rebelde creemos que los mejores momentos
+                    se viven alrededor de una buena mesa. Por eso,
+                    queremos ofrecer una experiencia gastronómica
+                    inspirada en los sabores de nuestra cocina criolla.
+                </p>
+
+                <p>
+                    Cada preparación busca conservar ese toque
+                    tradicional que convierte una comida en un
+                    recuerdo especial.
+                </p>
+
+                <a href="menu.html" class="btn-principal">
+                    Descubre nuestros sabores
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- PLATOS DESTACADOS -->
+        <section class="platos">
+
+            <div class="section-heading">
+
+                <span class="subtitulo">DE NUESTRA COCINA A TU MESA</span>
+
+                <h2>
+                    Sabores que <span>conquistan</span>
+                </h2>
+
+                <p>
+                    Descubre algunas de las preparaciones que
+                    representan nuestra esencia criolla.
+                </p>
+
+            </div>
+
+
+            <div class="platos-grid">
+
+                <article class="plato-card">
+
+                    <div class="plato-image">
+                        <img
+                            src="img/tradicion.jpg"
+                            alt="Plato tradicional de comida criolla"
+                            loading="lazy"
+                        >
+                    </div>
+
+                    <div class="plato-info">
+                        <span class="plato-etiqueta">TRADICIÓN</span>
+
+                        <h3>Sabor de nuestra tierra</h3>
+
+                        <p>
+                            Preparaciones tradicionales con
+                            ese toque casero que nos caracteriza.
+                        </p>
+                    </div>
+
+                </article>
+
+
+                <article class="plato-card">
+
+                    <div class="plato-image">
+                        <img
+                            src="img/casero.jpg"
+                            alt="Preparación típica colombiana"
+                            loading="lazy"
+                        >
+                    </div>
+
+                    <div class="plato-info">
+                        <span class="plato-etiqueta">AUTÉNTICO</span>
+
+                        <h3>Recetas con historia</h3>
+
+                        <p>
+                            El encuentro perfecto entre
+                            tradición, sabor y buenos ingredientes.
+                        </p>
+                    </div>
+
+                </article>
+
+
+                <article class="plato-card">
+
+                    <div class="plato-image">
+                        <img
+                            src="img/familia.jpg"
+                            alt="Comida criolla servida en la mesa"
+                            loading="lazy"
+                        >
+                    </div>
+
+                    <div class="plato-info">
+                        <span class="plato-etiqueta">ESPECIAL</span>
+
+                        <h3>Hecho para compartir</h3>
+
+                        <p>
+                            Una experiencia de sabor para
+                            disfrutar y compartir en familia.
+                        </p>
+                    </div>
+
+                </article>
+
+            </div>
+
+            <div class="platos-button">
+                <a href="menu.html" class="btn-principal">
+                    Ver menú completo
+                </a>
+            </div>
+
+        </section>
+
+
+        <!-- INVITACIÓN FINAL -->
+        <section class="invitacion">
+
+            <span class="subtitulo">EL SABOR NOS UNE</span>
+
+            <h2>
+                ¡Ven y descubre el lado más delicioso
+                <span>de la tradición!</span>
+            </h2>
+
+            <p>
+                En Cuchara Rebelde siempre hay un buen motivo
+                para sentarse a la mesa.
+            </p>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <div class="footer-brand">
+
+                <img
+                    src="img/cuchara_rebelde.png"
+                    alt="Logo Cuchara Rebelde"
+                >
+
+                <p>
+                    Tradición, sabor y pasión por
+                    nuestra gastronomía criolla.
+                </p>
+
+            </div>
+
+            <div class="footer-links">
+
+                <h3>Navegación</h3>
+
+                <a href="index.html">Inicio</a>
+                <a href="menu.html">Menú</a>
+                <a href="nuevo_plato.html">Nuevo plato</a>
+
+            </div>
+
+            <div class="footer-contacto">
+
+                <h3>Contáctanos</h3>
+
+                <p>Ven y disfruta de nuestra cocina criolla.</p>
+
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>
+                © 2026 Cuchara Rebelde.
+                Todos los derechos reservados.
+            </p>
+        </div>
+
+    </footer>
+
 </body>
 </html>

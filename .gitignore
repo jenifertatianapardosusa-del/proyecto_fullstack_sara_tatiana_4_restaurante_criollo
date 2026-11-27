@@ -1,15 +1,27 @@
+
 # Entornos virtuales de Python
 venv/
-backend/venv/
-**/venv/
 .venv/
+backend/venv/
 
 # Archivos temporales de Python
 __pycache__/
 *.py[cod]
 
-# Variables de entorno
+# Variables de entorno y credenciales
 .env
+.env.*
+!.env.example
 
-# Archivos del editor
+# Dependencias de Node.js
+node_modules/
+
+# Archivos de compilación
+dist/
+
+# Configuración del editor
 .vscode/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db

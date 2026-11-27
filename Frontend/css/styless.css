@@ -1,0 +1,678 @@
+
+/* =========================================
+   1. VARIABLES Y RESET
+========================================= */
+
+:root {
+    --rojo: #B83225;
+    --rojo-oscuro: #98291F;
+    --mostaza: #F5C542;
+    --crema: #FFF8E9;
+    --cafe: #56351F;
+    --gris: #6B6B6B;
+    --texto: #634A36;
+    --borde: #EBD9BB;
+
+    --verde-bg: #E3F3E5;
+    --verde-tx: #287A38;
+
+    --rojo-bg: #FCE4E1;
+    --rojo-tx: #A92F24;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--crema);
+    color: var(--cafe);
+    line-height: 1.5;
+}
+
+/* =========================================
+   2. CONTENEDOR PRINCIPAL
+========================================= */
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 25px 16px 40px;
+}
+
+
+/* =====================================
+   3. NAVBAR - MISMO DISEÑO DE INICIO.CSS
+===================================== */
+
+.nav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(255, 248, 233, 0.97);
+    border-bottom: 1px solid var(--borde);
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    max-width: 1250px;
+    width: 100%;
+    min-height: 125px;
+
+    margin: auto;
+    padding: 8px 30px;
+    gap: 20px;
+}
+
+/* LOGO */
+
+.navbar_logo {
+    display: block;
+    width: 200px;
+    height: auto;
+    max-height: 110px;
+    object-fit: contain;
+}
+
+/* ENLACES */
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--cafe);
+
+    font-size: 16px;
+    font-weight: 600;
+
+    padding: 11px 20px;
+    border-radius: 25px;
+
+    transition: all 0.25s ease;
+}
+
+/* HOVER AMARILLO */
+
+.nav-links a:hover {
+    background: var(--mostaza);
+    color: var(--cafe);
+}
+
+/* ENLACE ACTIVO */
+
+.nav-links a.activo {
+    background: var(--rojo);
+    color: #FFFFFF;
+}
+
+/* HOVER DEL ENLACE ACTIVO */
+
+.nav-links a.activo:hover {
+    background: var(--rojo-oscuro);
+    color: #FFFFFF;
+}
+
+/* TABLET */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        min-height: 110px;
+        padding: 8px 20px;
+    }
+
+    .navbar_logo {
+        width: 155px;
+    }
+
+    .nav-links {
+        gap: 5px;
+    }
+
+    .nav-links a {
+        padding: 9px 13px;
+        font-size: 14px;
+    }
+}
+
+/* CELULAR */
+
+@media (max-width: 560px) {
+
+    .navbar {
+        height: auto;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .navbar_logo {
+        width: 150px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-links a {
+        padding: 9px 14px;
+        font-size: 14px;
+    }
+}
+
+
+/* =========================================
+   4. TARJETAS GENERALES
+========================================= */
+
+.card {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 27px;
+    margin-bottom: 24px;
+
+    border: 1px solid var(--borde);
+    box-shadow: 0 3px 12px rgba(59, 42, 32, 0.08);
+}
+
+.card h2 {
+    margin: 0 0 20px;
+    font-size: 1.5rem;
+    color: var(--rojo);
+
+    border-bottom: 2px solid var(--borde);
+    padding-bottom: 10px;
+}
+
+.card h2 i {
+    margin-right: 8px;
+}
+
+/* =========================================
+   5. FORMULARIO
+========================================= */
+
+.form-group {
+    margin-bottom: 18px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 7px;
+}
+
+.required {
+    color: var(--rojo);
+}
+
+/* Campos de texto, precio, URL y categorías */
+
+input[type="text"],
+input[type="number"],
+input[type="url"],
+select {
+    width: 100%;
+    padding: 12px 14px;
+
+    font-size: 1rem;
+    font-family: inherit;
+
+    border: 1px solid var(--borde);
+    border-radius: 8px;
+
+    background: #FFFDFA;
+    color: var(--cafe);
+
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--mostaza);
+    box-shadow: 0 0 0 3px rgba(245, 197, 66, 0.25);
+}
+
+/* Checkbox */
+
+.form-group label:has(input[type="checkbox"]) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--rojo);
+}
+
+/* Vista previa de imagen del formulario */
+
+#vista-previa-contenedor {
+    margin-top: 12px;
+}
+
+#vista-previa {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--borde);
+}
+
+/* =========================================
+   6. BOTONES DEL FORMULARIO
+========================================= */
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 11px 18px;
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+
+    transition: transform 0.1s, filter 0.2s;
+}
+
+.btn:hover {
+    filter: brightness(1.08);
+}
+
+.btn:active {
+    transform: scale(0.97);
+}
+
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn i {
+    margin-right: 4px;
+}
+
+.btn-primary {
+    background: var(--rojo);
+    color: #FFFFFF;
+}
+
+.btn-secondary {
+    background: #7F8C8D;
+    color: #FFFFFF;
+}
+
+.btn-small {
+    padding: 7px 11px;
+    background: #F1E8D4;
+    color: var(--cafe);
+}
+
+.btn-danger {
+    background: #E74C3C;
+    color: #FFFFFF;
+}
+
+/* =========================================
+   7. MENSAJES Y ESTADOS
+========================================= */
+
+.mensaje {
+    margin-top: 14px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.mensaje.ok {
+    background: var(--verde-bg);
+    color: var(--verde-tx);
+}
+
+.mensaje.error {
+    background: var(--rojo-bg);
+    color: var(--rojo-tx);
+}
+
+.estado-lista {
+    text-align: center;
+    color: var(--gris);
+    padding: 18px 0;
+}
+
+/* =========================================
+   8. LISTA DE PLATOS
+========================================= */
+
+.lista-platos {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 0;
+}
+
+/* Cada plato tiene:
+   Imagen | Información | Acciones */
+
+.plato-item {
+    display: grid;
+    grid-template-columns: 180px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 22px;
+
+    padding: 22px 10px;
+
+    border-bottom: 1px solid var(--borde);
+
+    transition: background 0.2s ease;
+}
+
+.plato-item:last-child {
+    border-bottom: none;
+}
+
+.plato-item:hover {
+    background: #FFFAF0;
+}
+
+.plato-item.agotado {
+    opacity: 0.6;
+}
+
+/* =========================================
+   9. IMAGEN DEL PLATO
+========================================= */
+
+.plato-imagen {
+    width: 180px;
+    height: 140px;
+
+    object-fit: cover;
+    object-position: center;
+
+    display: block;
+
+    border-radius: 10px;
+    border: 1px solid var(--borde);
+}
+
+/* Imagen alternativa cuando no hay una URL válida */
+
+.plato-imagen-fallback {
+    width: 180px;
+    height: 140px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: var(--crema);
+    color: var(--cafe);
+
+    border: 1px dashed var(--mostaza);
+    border-radius: 10px;
+
+    padding: 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* =========================================
+   10. INFORMACIÓN DEL PLATO
+========================================= */
+
+.plato-info {
+    min-width: 0;
+}
+
+.plato-info h3 {
+    margin: 0 0 10px;
+
+    font-size: 1.3rem;
+    font-weight: 700;
+
+    color: var(--cafe);
+}
+
+.plato-info p {
+    margin: 7px 0;
+
+    color: var(--texto);
+    font-size: 1rem;
+}
+
+/* =========================================
+   11. ETIQUETAS DE DISPONIBILIDAD
+========================================= */
+
+.badge {
+    display: inline-block;
+
+    font-size: 0.8rem;
+    font-weight: 600;
+
+    padding: 5px 12px;
+    margin-top: 5px;
+
+    border-radius: 999px;
+}
+
+.badge.disponible {
+    background: var(--verde-bg);
+    color: var(--verde-tx);
+}
+
+.badge.no-disponible {
+    background: var(--rojo-bg);
+    color: var(--rojo-tx);
+}
+
+/* Compatibilidad con clases anteriores */
+
+.badge-ok {
+    background: var(--verde-bg);
+    color: var(--verde-tx);
+}
+
+.badge-no {
+    background: var(--rojo-bg);
+    color: var(--rojo-tx);
+}
+
+/* =========================================
+   12. BOTONES DE ACCIONES DEL MENÚ
+========================================= */
+
+.plato-acciones {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.plato-acciones button {
+    padding: 9px 12px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: var(--rojo);
+    color: #FFFFFF;
+
+    font-family: inherit;
+    font-size: 0.83rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.plato-acciones button:hover {
+    background: var(--rojo-oscuro);
+    transform: translateY(-2px);
+}
+
+.plato-acciones button:active {
+    transform: scale(0.97);
+}
+
+/* =========================================
+   13. RESPONSIVE - TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+    .container {
+        max-width: 100%;
+        padding: 20px 16px 35px;
+    }
+
+    .plato-item {
+        grid-template-columns: 150px minmax(0, 1fr);
+        gap: 16px;
+    }
+
+    .plato-imagen,
+    .plato-imagen-fallback {
+        width: 150px;
+        height: 125px;
+    }
+
+    .plato-acciones {
+        grid-column: 1 / -1;
+        justify-content: flex-start;
+    }
+}
+
+/* =========================================
+   14. RESPONSIVE - NAVBAR TABLET
+========================================= */
+
+@media (max-width: 768px) {
+
+    .navbar {
+        min-height: 110px;
+        padding: 8px 20px;
+    }
+
+    .navbar_logo {
+        width: 155px;
+    }
+
+    .nav-links {
+        gap: 5px;
+    }
+
+    .nav-links a {
+        padding: 9px 13px;
+        font-size: 14px;
+    }
+
+    .card {
+        padding: 22px;
+    }
+}
+
+/* =========================================
+   15. RESPONSIVE - CELULAR
+========================================= */
+
+@media (max-width: 560px) {
+
+    .navbar {
+        height: auto;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .navbar_logo {
+        width: 150px;
+    }
+
+    .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-links a {
+        padding: 9px 14px;
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 15px 10px 30px;
+    }
+
+    .card {
+        padding: 17px;
+    }
+
+    .card h2 {
+        font-size: 1.25rem;
+    }
+
+    /* Plato en una sola columna */
+
+    .plato-item {
+        grid-template-columns: 1fr;
+        gap: 13px;
+        padding: 20px 5px;
+    }
+
+    .plato-imagen,
+    .plato-imagen-fallback {
+        width: 100%;
+        height: 190px;
+    }
+
+    .plato-info h3 {
+        font-size: 1.15rem;
+    }
+
+    .plato-acciones {
+        grid-column: auto;
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .plato-acciones button {
+        flex: 1;
+        min-width: 100px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}

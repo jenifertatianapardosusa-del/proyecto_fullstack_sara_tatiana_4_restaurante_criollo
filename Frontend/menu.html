@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurante CUCHARA REBELDE - SENA ADSO</title>
+
+    <link rel="stylesheet" href="css/styless.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+     <!-- NAVBAR -->
+    <header class="nav">
+    <div class="navbar">
+
+        <img class="navbar_logo"
+             src="img/cuchara_rebelde.png"
+             alt="Logo de Cuchara Rebelde">
+
+        <nav class="nav-links">
+            <a href="index.html">Inicio</a>
+            <a href="menu.html" class="activo">Menú</a>
+            <a href="nuevo_plato.html">Nuevo plato</a>
+        </nav>
+
+    </div>
+    </header>
+
+    <div class="container">
+
+    <section class="card list-card">
+            <h2><i class="fa-solid fa-book-open"></i> Menú completo</h2>
+
+            <div class="form-group">
+                <label for="filtro-categoria">Filtrar por categoría</label>
+                <select id="filtro-categoria">
+                    <option value="">Todas</option>
+                    <option value="Sopas y Sancochos">Sopas y Sancochos</option>
+                    <option value="Platos Tipicos">Platos Típicos</option>
+                    <option value="Entradas y Amasijos">Entradas y Amasijos</option>
+                    <option value="Postres y Bebidas">Postres y Bebidas</option>
+                </select>
+            </div>
+
+            <p id="estado-lista" class="estado-lista">Cargando menú...</p>
+            <ul id="lista-platos" class="lista-platos"></ul>
+        </section>
+        </div>
+
+        <script src="app.js"></script>
+    
+</body>
+</html>

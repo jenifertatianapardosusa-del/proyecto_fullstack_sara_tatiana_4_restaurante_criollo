@@ -1,213 +1,587 @@
+
 const API_URL = "http://127.0.0.1:8000";
 
+// ==========================================
+// 1. REFERENCIAS A LOS ELEMENTOS DEL HTML
+// ==========================================
+
+// Formulario
 const form = document.getElementById("form-plato");
 const inputNombre = document.getElementById("nombre_plato");
 const inputCategoria = document.getElementById("categoria");
 const inputPrecio = document.getElementById("precio");
 const inputDisponible = document.getElementById("disponible_hoy");
+const inputImagen = document.getElementById("imagen_url");
+
 const btnGuardar = document.getElementById("btn-guardar");
 const btnCancelar = document.getElementById("btn-cancelar");
 const tituloForm = document.getElementById("titulo-form");
 const mensaje = document.getElementById("mensaje");
+
+// Vista previa
+const vistaPrevia = document.getElementById("vista-previa");
+const vistaPreviaContenedor = document.getElementById(
+    "vista-previa-contenedor"
+);
+
+// Elementos de la página del menú
 const lista = document.getElementById("lista-platos");
 const estadoLista = document.getElementById("estado-lista");
 const filtro = document.getElementById("filtro-categoria");
 
+// ==========================================
+// 2. VARIABLES
+// ==========================================
+
 let platos = [];
 let idEnEdicion = null;
 
-// Utilidades 
-function mostrarMensaje(texto, tipo = "ok") {
+// ==========================================
+// 3. FUNCIONES GENERALES
+// ==========================================
+
+// Mostrar mensajes
+function mostrarMensaje(texto, tipo = "error") {
+    if (!mensaje) return;
+
     mensaje.textContent = texto;
     mensaje.className = `mensaje ${tipo}`;
     mensaje.hidden = false;
-    setTimeout(() => (mensaje.hidden = true), 4000);
 }
 
+// Formatear precios en pesos colombianos
 function formatoCOP(valor) {
     return new Intl.NumberFormat("es-CO", {
-        style: "currency", currency: "COP", maximumFractionDigits: 0
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0
     }).format(valor);
 }
 
-// Extrae el mensaje de error que devuelve FastAPI (400, 404, 422)
-async function leerError(respuesta) {
+// Obtener mensajes de error de la API
+async function leerError(response) {
     try {
-        const data = await respuesta.json();
-        if (typeof data.detail === "string") return data.detail;
-        if (Array.isArray(data.detail)) {
-            return data.detail.map(e => `${e.loc.slice(1).join(".")}: ${e.msg}`).join(" | ");
-        }
-    } catch (_) {}
-    return `Error ${respuesta.status}`;
-}
-
-// READ 
-async function cargarPlatos() {
-    estadoLista.textContent = "Cargando menú...";
-    estadoLista.hidden = false;
-    try {
-        const respuesta = await fetch(`${API_URL}/Menu_completo`);
-        if (!respuesta.ok) throw new Error(await leerError(respuesta));
-        platos = await respuesta.json();
-        renderizar();
-    } catch (error) {
-        estadoLista.textContent = "No se pudo conectar con la API. ¿Está corriendo uvicorn?";
-        console.error(error);
+        const error = await response.json();
+        return error.detail || "Ocurrió un error en la solicitud.";
+    } catch {
+        return "No fue posible procesar la solicitud.";
     }
 }
 
+// Obtener el identificador del plato
+function obtenerId(plato) {
+    return plato.id || plato._id;
+}
+
+// ==========================================
+// 4. VISTA PREVIA DE LA IMAGEN
+// ==========================================
+
+if (inputImagen && vistaPrevia && vistaPreviaContenedor) {
+
+    inputImagen.addEventListener("input", () => {
+        const url = inputImagen.value.trim();
+
+        if (url) {
+            vistaPrevia.src = url;
+            vistaPreviaContenedor.hidden = false;
+        } else {
+            vistaPrevia.removeAttribute("src");
+            vistaPreviaContenedor.hidden = true;
+        }
+    });
+
+    // Si la imagen no carga, ocultar la vista previa
+    vistaPrevia.addEventListener("error", () => {
+        vistaPreviaContenedor.hidden = true;
+    });
+
+    vistaPrevia.addEventListener("load", () => {
+        vistaPreviaContenedor.hidden = false;
+    });
+}
+
+// ==========================================
+// 5. CARGAR PLATOS DESDE LA API
+// ==========================================
+
+async function cargarPlatos() {
+
+    // Solo cargar el listado si estamos en una página
+    // que contiene los elementos necesarios.
+    if (!lista) return;
+
+    if (estadoLista) {
+        estadoLista.textContent = "Cargando menú...";
+        estadoLista.hidden = false;
+    }
+
+    try {
+        const response = await fetch(`${API_URL}/Menu_completo`);
+
+        if (!response.ok) {
+            throw new Error(await leerError(response));
+        }
+
+        platos = await response.json();
+
+        renderizar();
+
+    } catch (error) {
+        console.error("Error al cargar los platos:", error);
+
+        if (estadoLista) {
+            estadoLista.textContent =
+                "No fue posible cargar el menú. Verifica la conexión con el servidor.";
+            estadoLista.hidden = false;
+        }
+    }
+}
+
+// ==========================================
+// 6. MOSTRAR LOS PLATOS EN EL MENÚ
+// ==========================================
+
+
 function renderizar() {
-    const categoria = filtro.value;
-    const visibles = categoria
-        ? platos.filter(p => p.categoria.includes(categoria))
-        : platos;
+
+    // Evitar errores si esta página no tiene el listado
+    if (!lista) return;
 
     lista.innerHTML = "";
 
-    if (visibles.length === 0) {
-        estadoLista.textContent = "No hay platos para mostrar.";
-        estadoLista.hidden = false;
+    const categoria = filtro ? filtro.value : "";
+
+    const platosFiltrados = platos.filter(plato => {
+        if (!categoria) return true;
+
+        return Array.isArray(plato.categoria) &&
+            plato.categoria.includes(categoria);
+    });
+
+    if (platosFiltrados.length === 0) {
+        if (estadoLista) {
+            estadoLista.textContent = "No hay platos para mostrar.";
+            estadoLista.hidden = false;
+        }
         return;
     }
-    estadoLista.hidden = true;
 
-    visibles.forEach(plato => {
+    if (estadoLista) {
+        estadoLista.hidden = true;
+    }
+
+    platosFiltrados.forEach(plato => {
+
         const li = document.createElement("li");
-        li.className = "plato-item" + (plato.disponible_hoy ? "" : " agotado");
+        li.className = "plato-item";
 
+        // IMAGEN DEL PLATO
+        const imagen = document.createElement("img");
+
+        imagen.className = "plato-imagen";
+        imagen.alt = plato.nombre_plato || "Imagen del plato";
+        imagen.loading = "lazy";
+
+        // INFORMACIÓN DEL PLATO
         const info = document.createElement("div");
         info.className = "plato-info";
 
         const nombre = document.createElement("h3");
         nombre.textContent = plato.nombre_plato;
 
-        const detalle = document.createElement("p");
-        detalle.textContent = `${plato.categoria.join(", ")} · ${formatoCOP(plato.precio)}`;
+        const categoriaTexto = document.createElement("p");
+        categoriaTexto.textContent =
+            `Categoría: ${(plato.categoria || []).join(", ")}`;
 
-        const estado = document.createElement("span");
-        estado.className = "badge " + (plato.disponible_hoy ? "badge-ok" : "badge-no");
-        estado.textContent = plato.disponible_hoy ? "Disponible" : "Agotado";
+        const precio = document.createElement("p");
+        precio.textContent = `Precio: ${formatoCOP(plato.precio)}`;
 
-        info.append(nombre, detalle, estado);
+        const disponibilidad = document.createElement("span");
 
+        disponibilidad.className = plato.disponible_hoy
+            ? "badge disponible"
+            : "badge no-disponible";
+
+        disponibilidad.textContent = plato.disponible_hoy
+            ? "Disponible hoy"
+            : "No disponible";
+
+        info.append(
+            nombre,
+            categoriaTexto,
+            precio,
+            disponibilidad
+        );
+
+        // ACCIONES
         const acciones = document.createElement("div");
         acciones.className = "plato-acciones";
 
-        const btnToggle = document.createElement("button");
-        btnToggle.className = "btn btn-small";
-        btnToggle.innerHTML = '<i class="fa-solid fa-toggle-on"></i>';
-        btnToggle.title = "Cambiar disponibilidad";
-        btnToggle.addEventListener("click", () => cambiarDisponibilidad(plato));
+        const btnDisponibilidad = document.createElement("button");
+        btnDisponibilidad.type = "button";
+
+        btnDisponibilidad.textContent = plato.disponible_hoy
+            ? "Marcar no disponible"
+            : "Marcar disponible";
+
+        btnDisponibilidad.addEventListener("click", () => {
+            cambiarDisponibilidad(plato);
+        });
 
         const btnEditar = document.createElement("button");
-        btnEditar.className = "btn btn-small";
-        btnEditar.innerHTML = '<i class="fa-solid fa-pen"></i>';
-        btnEditar.title = "Editar";
-        btnEditar.addEventListener("click", () => iniciarEdicion(plato));
+        btnEditar.type = "button";
+        btnEditar.textContent = "Editar";
+
+        btnEditar.addEventListener("click", () => {
+            const id = obtenerId(plato);
+
+            if (id) {
+                window.location.href =
+                    `nuevo_plato.html?id=${encodeURIComponent(id)}`;
+            }
+        });
 
         const btnEliminar = document.createElement("button");
-        btnEliminar.className = "btn btn-small btn-danger";
-        btnEliminar.innerHTML = '<i class="fa-solid fa-trash"></i>';
-        btnEliminar.title = "Eliminar";
-        btnEliminar.addEventListener("click", () => eliminarPlato(plato));
+        btnEliminar.type = "button";
+        btnEliminar.textContent = "Eliminar";
 
-        acciones.append(btnToggle, btnEditar, btnEliminar);
-        li.append(info, acciones);
+        btnEliminar.addEventListener("click", () => {
+            eliminarPlato(plato);
+        });
+
+        acciones.append(
+            btnDisponibilidad,
+            btnEditar,
+            btnEliminar
+        );
+
+        // AGREGAR ELEMENTOS A LA TARJETA
+        li.append(imagen, info, acciones);
+
         lista.appendChild(li);
+
+        // CARGAR LA IMAGEN DESPUÉS DE AGREGARLA AL DOM
+        if (plato.imagen_url) {
+
+            imagen.addEventListener("error", () => {
+
+                const fallback = document.createElement("div");
+                fallback.className = "plato-imagen-fallback";
+                fallback.textContent = plato.nombre_plato;
+
+                imagen.replaceWith(fallback);
+
+            }, { once: true });
+
+            imagen.src = plato.imagen_url;
+
+        } else {
+
+            const fallback = document.createElement("div");
+            fallback.className = "plato-imagen-fallback";
+            fallback.textContent = plato.nombre_plato;
+
+            imagen.replaceWith(fallback);
+        }
     });
 }
 
-// CREATE / UPDATE 
-form.addEventListener("submit", async (e) => {
-    e.preventDefault();
 
-    const datos = {
-        nombre_plato: inputNombre.value.trim(),
-        categoria: [inputCategoria.value],   // la API espera una lista
-        precio: parseInt(inputPrecio.value, 10),
-        disponible_hoy: inputDisponible.checked
-    };
+// ==========================================
+// 7. REGISTRAR O ACTUALIZAR UN PLATO
+// ==========================================
 
-    const editando = idEnEdicion !== null;
-    const url = editando
-        ? `${API_URL}/Menu_completo/${idEnEdicion}`
-        : `${API_URL}/Nuevo_plato`;
+if (form) {
 
-    try {
-        const respuesta = await fetch(url, {
-            method: editando ? "PUT" : "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(datos)
-        });
-        if (!respuesta.ok) throw new Error(await leerError(respuesta));
+    form.addEventListener("submit", async (event) => {
 
-        mostrarMensaje(editando ? "Plato actualizado correctamente" : "Plato creado correctamente");
-        resetearFormulario();
-        await cargarPlatos();
-    } catch (error) {
-        mostrarMensaje(error.message, "error");
-    }
-});
+        event.preventDefault();
+
+        const datos = {
+            nombre_plato: inputNombre.value.trim(),
+            categoria: [inputCategoria.value],
+            precio: Number(inputPrecio.value),
+            disponible_hoy: inputDisponible.checked,
+            imagen_url: inputImagen ? inputImagen.value.trim() : null
+        };
+
+        const esEdicion = idEnEdicion !== null;
+
+        const url = esEdicion
+            ? `${API_URL}/Menu_completo/${idEnEdicion}`
+            : `${API_URL}/Nuevo_plato`;
+
+        const metodo = esEdicion ? "PUT" : "POST";
+
+        try {
+
+            btnGuardar.disabled = true;
+
+            const response = await fetch(url, {
+                method: metodo,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(datos)
+            });
+
+            if (!response.ok) {
+                throw new Error(await leerError(response));
+            }
+
+            mostrarMensaje(
+                esEdicion
+                    ? "¡Plato actualizado correctamente!"
+                    : "¡Plato registrado correctamente!",
+                "ok"
+            );
+
+            resetearFormulario();
+
+            // Actualizar listado si existe en esta página
+            if (lista) {
+                await cargarPlatos();
+            }
+
+        } catch (error) {
+
+            console.error("Error al guardar el plato:", error);
+            mostrarMensaje(error.message);
+
+        } finally {
+            btnGuardar.disabled = false;
+        }
+    });
+}
+
+// ==========================================
+// 8. INICIAR EDICIÓN DE UN PLATO
+// ==========================================
 
 function iniciarEdicion(plato) {
-    idEnEdicion = plato._id;
+
+    if (!form) return;
+
+    idEnEdicion = obtenerId(plato);
+
+    if (!idEnEdicion) {
+        mostrarMensaje("No se encontró el identificador del plato.");
+        return;
+    }
+
     inputNombre.value = plato.nombre_plato;
-    inputCategoria.value = plato.categoria[0] ?? "";
+    inputCategoria.value = plato.categoria?.[0] || "";
     inputPrecio.value = plato.precio;
     inputDisponible.checked = plato.disponible_hoy;
 
-    tituloForm.innerHTML = '<i class="fa-solid fa-pen"></i> Editar plato';
-    btnGuardar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Actualizar plato';
-    btnCancelar.hidden = false;
-    form.scrollIntoView({ behavior: "smooth" });
+    if (inputImagen) {
+        inputImagen.value = plato.imagen_url || "";
+        inputImagen.dispatchEvent(new Event("input"));
+    }
+
+    if (tituloForm) {
+        tituloForm.textContent = "Editar plato";
+    }
+
+    if (btnGuardar) {
+        btnGuardar.innerHTML = "Actualizar plato";
+    }
+
+    if (btnCancelar) {
+        btnCancelar.hidden = false;
+    }
 }
+
+// ==========================================
+// 9. CARGAR PLATO PARA EDICIÓN DESDE LA URL
+// ==========================================
+
+async function cargarPlatoParaEditar() {
+
+    if (!form) return;
+
+    const parametros = new URLSearchParams(window.location.search);
+    const id = parametros.get("id");
+
+    if (!id) return;
+
+    try {
+
+        const response = await fetch(
+            `${API_URL}/Menu_completo/${encodeURIComponent(id)}`
+        );
+
+        if (!response.ok) {
+            throw new Error(await leerError(response));
+        }
+
+        const plato = await response.json();
+
+        iniciarEdicion(plato);
+
+    } catch (error) {
+
+        console.error("Error al cargar el plato:", error);
+        mostrarMensaje(error.message);
+    }
+}
+
+// ==========================================
+// 10. REINICIAR FORMULARIO
+// ==========================================
 
 function resetearFormulario() {
-    idEnEdicion = null;
+
+    if (!form) return;
+
     form.reset();
-    inputCategoria.value = "";
-    tituloForm.innerHTML = '<i class="fa-solid fa-plus-circle"></i> Nuevo plato';
-    btnGuardar.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Guardar plato';
-    btnCancelar.hidden = true;
+
+    idEnEdicion = null;
+
+    if (inputImagen) {
+        inputImagen.value = "";
+    }
+
+    if (vistaPrevia) {
+        vistaPrevia.removeAttribute("src");
+    }
+
+    if (vistaPreviaContenedor) {
+        vistaPreviaContenedor.hidden = true;
+    }
+
+    if (tituloForm) {
+        tituloForm.textContent = "Nuevo plato";
+    }
+
+    if (btnGuardar) {
+        btnGuardar.innerHTML = "Guardar plato";
+    }
+
+    if (btnCancelar) {
+        btnCancelar.hidden = true;
+    }
 }
 
-btnCancelar.addEventListener("click", resetearFormulario);
+// ==========================================
+// 11. BOTÓN CANCELAR EDICIÓN
+// ==========================================
 
-// UPDATE parcial (solo disponibilidad)
+if (btnCancelar) {
+
+    btnCancelar.addEventListener("click", () => {
+
+        resetearFormulario();
+
+        if (mensaje) {
+            mensaje.hidden = true;
+        }
+
+        // Quitar el parámetro de edición de la dirección
+        window.history.replaceState(
+            {},
+            document.title,
+            window.location.pathname
+        );
+    });
+}
+
+// ==========================================
+// 12. CAMBIAR DISPONIBILIDAD
+// ==========================================
+
 async function cambiarDisponibilidad(plato) {
+
+    const id = obtenerId(plato);
+
+    if (!id) return;
+
     try {
-        const respuesta = await fetch(`${API_URL}/Menu_completo/${plato._id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ disponible_hoy: !plato.disponible_hoy })
-        });
-        if (!respuesta.ok) throw new Error(await leerError(respuesta));
+
+        const response = await fetch(
+            `${API_URL}/Menu_completo/${id}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    disponible_hoy: !plato.disponible_hoy
+                })
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(await leerError(response));
+        }
+
         await cargarPlatos();
+
     } catch (error) {
-        mostrarMensaje(error.message, "error");
+
+        console.error("Error al cambiar disponibilidad:", error);
+        alert(error.message);
     }
 }
 
-//DELETE 
+// ==========================================
+// 13. ELIMINAR PLATO
+// ==========================================
+
 async function eliminarPlato(plato) {
-    if (!confirm(`¿Eliminar "${plato.nombre_plato}" del menú?`)) return;
+
+    const id = obtenerId(plato);
+
+    if (!id) return;
+
+    const confirmar = confirm(
+        `¿Estás seguro de eliminar ${plato.nombre_plato}?`
+    );
+
+    if (!confirmar) return;
 
     try {
-        const respuesta = await fetch(`${API_URL}/Menu_completo/${plato._id}`, {
-            method: "DELETE"
-        });
-        if (!respuesta.ok) throw new Error(await leerError(respuesta));
 
-        mostrarMensaje("Plato eliminado correctamente");
-        if (idEnEdicion === plato._id) resetearFormulario();
+        const response = await fetch(
+            `${API_URL}/Menu_completo/${id}`,
+            {
+                method: "DELETE"
+            }
+        );
+
+        if (!response.ok) {
+            throw new Error(await leerError(response));
+        }
+
         await cargarPlatos();
+
     } catch (error) {
-        mostrarMensaje(error.message, "error");
+
+        console.error("Error al eliminar el plato:", error);
+        alert(error.message);
     }
 }
 
-filtro.addEventListener("change", renderizar);
+// ==========================================
+// 14. EVENTO DEL FILTRO
+// ==========================================
 
-// Carga inicial
-cargarPlatos();
+if (filtro) {
+    filtro.addEventListener("change", renderizar);
+}
+
+// ==========================================
+// 15. INICIALIZACIÓN
+// ==========================================
+
+// Si estamos en menu.html, cargar los platos.
+if (lista) {
+    cargarPlatos();
+}
+
+// Si estamos en nuevo_plato.html, comprobar si
+// se está editando un plato existente.
+if (form) {
+    cargarPlatoParaEditar();
+}
