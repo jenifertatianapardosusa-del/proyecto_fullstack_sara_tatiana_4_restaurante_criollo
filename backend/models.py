@@ -85,3 +85,27 @@ class PlatoUpdate(BaseModel):
             default=False,
             description="Estado de disponibilidad del plato en el día"
     )
+    imagen_url: str = Field(
+        ...,
+        description="URL publica de la imagen del plato",
+        exmaples=["https://images.unsplash.com/photo-xxxx"]
+    )
+    
+class PlatoCreate(PlatoBase):
+    pass
+
+class Plato(PlatoBase):
+    id: PyObjectId = Field(alias="_id", descripcion="identificador unico ObjectId de MongoDB")
+    fecha_creacion: datetime
+    
+    model_config = ConfigDict(
+        populate_by_name=True,
+        arbitrary_types_allowed=True
+    )
+    
+class PlatoUpdate(BaseModel):
+    nombre_plato: Optional[str] = Field(default=None, min_lenght=3, max_lenght=150)
+    categoria: Optional[list[str]] = None
+    precio: Optional[int] = Field(default=None, gt=0)
+    diponible_hoy: Optional[bool] = None
+    imagen_url: Optional[str] = None
